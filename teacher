@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘은뮤직 솔루션 강사용 매뉴얼</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background: #f4f7f6;
+            line-height: 1.7;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* 헤더 */
+        .manual-header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 50px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 16px;
+        }
+        .manual-header h1 { font-size: 2em; margin-bottom: 10px; }
+        .manual-header p { opacity: 0.8; font-size: 1.1em; }
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 15px;
+        }
+        
+        /* 목차 */
+        .toc {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .toc h2 { color: #1e293b; margin-bottom: 15px; font-size: 1.2em; }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #475569;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toc-item:hover { background: #1e293b; color: white; }
+        .toc-num {
+            width: 24px; height: 24px;
+            background: #1e293b; color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8em; font-weight: bold;
+        }
+        .toc-item:hover .toc-num { background: white; color: #1e293b; }
+        
+        /* 섹션 */
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .section-icon {
+            width: 48px; height: 48px;
+            background: #1e293b;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4em;
+        }
+        .section-title { font-size: 1.3em; color: #1e293b; }
+        .section-num {
+            background: #e2e8f0;
+            color: #64748b;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+        
+        /* UI 미리보기 박스 */
+        .ui-preview {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .ui-preview-title {
+            font-size: 0.85em;
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* 실제 UI 요소 재현 */
+        .mock-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 12px;
+        }
+        .mock-card h4 {
+            margin: 0 0 10px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+            color: #333;
+        }
+        
+        /* 버튼 스타일 */
+        .mock-btn {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border: none;
+            cursor: default;
+        }
+        .mock-btn.blue { background: #17a2b8; color: white; }
+        .mock-btn.red { background: #dc3545; color: white; }
+        .mock-btn.green { background: #28a745; color: white; }
+        .mock-btn.orange { background: #fd7e14; color: white; }
+        .mock-btn.gray { background: #6c757d; color: white; }
+        .mock-btn.dark { background: #1e293b; color: white; }
+        
+        /* 타임라인 이벤트 */
+        .mock-event {
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            border-left: 4px solid;
+        }
+        .mock-event.scheduled { background: white; border-color: #333; color: #333; }
+        .mock-event.completed { background: linear-gradient(135deg, #ebfbee, #d3f9d8); border-color: #40c057; color: #2f9e44; }
+        .mock-event.absent { background: linear-gradient(135deg, #ffe0e0, #ffc9c9); border-color: #e03131; color: #c92a2a; }
+        .mock-event.planning { background: linear-gradient(135deg, #fff0f6, #ffdeeb); border-color: #e64980; color: #c2255c; }
+        .mock-event.extra { background: linear-gradient(135deg, #fff3bf, #ffec99); border-color: #fab005; color: #e67700; }
+        
+        .mock-event .time { font-size: 0.75em; opacity: 0.7; }
+        .mock-event .name { font-weight: 700; }
+        .mock-event .info { font-size: 0.75em; opacity: 0.7; }
+        
+        /* 모달 미리보기 */
+        .mock-modal {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        .mock-modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+        }
+        .mock-modal-body {
+            padding: 20px;
+        }
+        .mock-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+        
+        /* 설명 박스 */
+        .explain-box {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin: 15px 0;
+        }
+        .explain-box.tip { background: #ecfdf5; border-color: #6ee7b7; }
+        .explain-box.warning { background: #fef2f2; border-color: #fca5a5; }
+        .explain-icon { font-size: 1.1em; margin-right: 8px; }
+        
+        /* 스텝 */
+        .steps { margin-top: 20px; }
+        .step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 18px;
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #1e293b;
+        }
+        .step-num {
+            width: 28px; height: 28px;
+            background: #1e293b; color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .step-content h4 { color: #1e293b; margin-bottom: 6px; }
+        .step-content p { color: #64748b; font-size: 0.95em; }
+        
+        /* 색상 범례 */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+            color: #64748b;
+        }
+        .legend-dot {
+            width: 12px; height: 12px;
+            border-radius: 3px;
+        }
+        
+        /* 탭 버튼 미리보기 */
+        .mock-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        .mock-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #eee;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #666;
+            text-align: center;
+        }
+        .mock-tab.active { background: #007bff; color: white; }
+        
+        /* 성과 배지 */
+        .mock-badge {
+            display: block;
+            padding: 12px 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .mock-badge strong { display: block; font-size: 1.05em; margin-bottom: 2px; }
+        .mock-badge span { font-size: 0.8em; opacity: 0.9; }
+        
+        /* 급여 카드 */
+        .salary-card {
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .salary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #475569;
+        }
+        .salary-row:last-child { border-bottom: none; }
+        .salary-row.highlight {
+            color: #4ade80;
+            font-size: 1.1em;
+            font-weight: bold;
+            padding-top: 12px;
+        }
+        .salary-row.tax { color: #f87171; }
+        
+        /* 수업 가능 시간 그리드 */
+        .time-grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75em;
+        }
+        .time-grid th {
+            padding: 6px 4px;
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            font-weight: bold;
+            color: #555;
+        }
+        .time-grid td {
+            padding: 4px;
+            border: 1px solid #eee;
+            width: 12%;
+            height: 18px;
+        }
+        .time-grid .available { background: #d4edda; } /* 초록 - 수업 가능 */
+        .time-grid .blocked { background: #e9ecef; } /* 회색 - 휴무 */
+        .time-grid .time-label { 
+            width: 50px; 
+            font-weight: bold; 
+            color: #555; 
+            text-align: center;
+            background: white;
+        }
+        
+        /* 수강생 상세 페이지 재현 */
+        .student-profile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .student-name {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: #1e293b;
+        }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            color: white;
+        }
+        .status-badge.active { background: #10b981; }
+        .status-badge.hold { background: #f59e0b; }
+        .status-badge.ended { background: #ef4444; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #bfdbfe;
+        }
+        .stat-box.warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-color: #fbbf24;
+        }
+        .stat-box.danger {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: #f87171;
+        }
+        .stat-label { font-size: 0.75em; color: #64748b; margin-bottom: 5px; }
+        .stat-value { font-size: 1.3em; font-weight: 800; color: #1e40af; }
+        .stat-unit { font-size: 0.8em; color: #3b82f6; }
+        
+        /* 히스토리 테이블 */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+        }
+        .history-table th {
+            background: #f8fafc;
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .history-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .round-badge {
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85em;
+        }
+        
+        /* 푸터 */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        
+        /* 인쇄 */
+        @media print {
+            body { background: white; }
+            .section, .toc { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+            .manual-header { background: #1e293b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+        
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .manual-header { padding: 30px 20px; }
+            .manual-header h1 { font-size: 1.5em; }
+            .section { padding: 20px; }
+            .toc-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="manual-header">
+            <h1>🎵 오늘은뮤직 솔루션 강사용 매뉴얼</h1>
+            <p>강사 대시보드 완벽 가이드</p>
+            <span class="version-badge">📘 Ver 3.0 | 2026.04</span>
+        </div>
+        
+        <!-- 목차 -->
+        <div class="toc">
+            <h2>📋 목차</h2>
+            <div class="toc-grid">
+                <a href="#section1" class="toc-item"><span class="toc-num">1</span>대시보드 홈 화면</a>
+                <a href="#section2" class="toc-item"><span class="toc-num">2</span>주간 스케줄 보기</a>
+                <a href="#section3" class="toc-item"><span class="toc-num">3</span>출석/결석 처리 (오수완)</a>
+                <a href="#section4" class="toc-item"><span class="toc-num">4</span>수업 추가 및 수정</a>
+                <a href="#section5" class="toc-item"><span class="toc-num">5</span>수강생 상세 관리</a>
+                <a href="#section6" class="toc-item"><span class="toc-num">6</span>월별 보기 & 급여 확인</a>
+            </div>
+        </div>
+        
+        <!-- 섹션 1: 대시보드 홈 -->
+        <div class="section" id="section1">
+            <div class="section-header">
+                <div class="section-icon">🏠</div>
+                <div>
+                    <span class="section-num">SECTION 1</span>
+                    <h3 class="section-title">대시보드 홈 화면</h3>
+                </div>
+            </div>
+            
+            <p>로그인 후 가장 먼저 보이는 화면입니다. 한눈에 필요한 정보를 확인할 수 있어요.</p>
+            
+            <!-- 상단 헤더 미리보기 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">🖥️ 상단 헤더</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; border-radius: 8px;">
+                    <h3 style="margin: 0; font-size: 1.2em;">📋 홍길동 선생님 대시보드</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <span class="mock-btn blue">📅 월별 보기</span>
+                        <span class="mock-btn red">로그아웃</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 수업 가능 시간 그리드 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">🕐 수업 가능 시간 (사이드바)</div>
+                <div class="mock-card" style="max-width: 350px;">
+                    <h4>🕐 수업 가능 시간</h4>
+                    <table class="time-grid">
+                        <thead>
+                            <tr>
+                                <th>시간</th>
+                                <th>월</th>
+                                <th>화</th>
+                                <th>수</th>
+                                <th>목</th>
+                                <th>금</th>
+                                <th>토</th>
+                                <th>일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="time-label">13:00</td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="blocked"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="blocked"></td>
+                                <td class="blocked"></td>
+                            </tr>
+                            <tr>
+                                <td class="time-label">14:00</td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="blocked"></td>
+                                <td class="blocked"></td>
+                            </tr>
+                            <tr>
+                                <td class="time-label">15:00</td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="blocked"></td>
+                            </tr>
+                            <tr>
+                                <td class="time-label">16:00</td>
+                                <td class="blocked"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="blocked"></td>
+                                <td class="available"></td>
+                                <td class="available"></td>
+                                <td class="blocked"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="legend" style="margin-top: 12px;">
+                        <div class="legend-item"><div class="legend-dot" style="background: #d4edda;"></div>수업 가능</div>
+                        <div class="legend-item"><div class="legend-dot" style="background: #e9ecef;"></div>휴무</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explain-box tip">
+                <span class="explain-icon">💚</span>
+                <strong>초록색 칸</strong>은 수업이 가능한 시간, <strong>회색 칸</strong>은 휴무로 설정된 시간입니다. 요일 헤더를 클릭해서 직접 변경할 수 있어요!
+            </div>
+            
+            <!-- 사이드바 카드들 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">📊 오른쪽 사이드바</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div class="mock-card">
+                        <h4>🏆 나의 성과</h4>
+                        <div class="mock-badge" style="background: #d1fae5; color: #065f46; border: 1px solid #065f46;">
+                            <strong>🌟 베테랑</strong>
+                            <span>수강생 10명 이상</span>
+                        </div>
+                        <div class="mock-badge" style="background: #fce7f3; color: #9d174d; border: 1px solid #9d174d;">
+                            <strong>💖 장기 마스터</strong>
+                            <span>6개월↑ 수강생 3명</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mock-card">
+                        <h4>📢 전달 메시지</h4>
+                        <div style="background: #fff3cd; border: 1px solid #ffeeba; padding: 12px; border-radius: 5px; font-size: 0.9em; color: #856404;">
+                            이번 주 금요일 강사 회의 있습니다.<br>오후 3시까지 참석 부탁드려요!
+                        </div>
+                    </div>
+                    
+                    <div class="mock-card">
+                        <h4>📊 상세 지표</h4>
+                        <div style="font-size: 0.9em;">
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee;">
+                                <span>총 수강생</span>
+                                <strong>12명</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee;">
+                                <span>플래닝 등록률</span>
+                                <strong style="color: #007bff;">75% (3명)</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                                <span>이번달 신규</span>
+                                <strong style="color: #28a745;">2명</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 섹션 2: 주간 스케줄 -->
+        <div class="section" id="section2">
+            <div class="section-header">
+                <div class="section-icon">📆</div>
+                <div>
+                    <span class="section-num">SECTION 2</span>
+                    <h3 class="section-title">주간 스케줄 보기</h3>
+                </div>
+            </div>
+            
+            <p>이번 주의 모든 수업 일정을 시간표 형태로 확인할 수 있습니다.</p>
+            
+            <!-- 타임라인 미리보기 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">📅 주간 타임라인 (예시)</div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                    <div>
+                        <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px 8px 0 0; border-bottom: 2px solid #e9ecef;">
+                            <div style="font-size: 0.8em; color: #868e96;">월</div>
+                            <div style="font-size: 1.4em; font-weight: 800;">14</div>
+                        </div>
+                        <div style="background: #fafafa; border-radius: 0 0 8px 8px; padding: 8px;">
+                            <div class="mock-event scheduled">
+                                <div class="time">14:00</div>
+                                <div class="name">김민준</div>
+                                <div class="info">피아노 50분</div>
+                            </div>
+                            <div class="mock-event completed">
+                                <div class="time">15:00</div>
+                                <div class="name">이서연 ✓</div>
+                                <div class="info">피아노 50분</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="text-align: center; padding: 10px; background: linear-gradient(135deg, #fff5f5, #ffe3e3); border-radius: 8px 8px 0 0; border-bottom: 3px solid #ff6b6b;">
+                            <div style="font-size: 0.8em; color: #868e96;">화</div>
+                            <div style="font-size: 1.4em; font-weight: 800; color: #ff6b6b;">15</div>
+                        </div>
+                        <div style="background: #fafafa; border-radius: 0 0 8px 8px; padding: 8px;">
+                            <div class="mock-event planning">
+                                <div class="time">13:00</div>
+                                <div class="name">박지훈 (플래닝)</div>
+                                <div class="info">상담</div>
+                            </div>
+                            <div class="mock-event scheduled">
+                                <div class="time">16:00</div>
+                                <div class="name">최예은</div>
+                                <div class="info">피아노 50분</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px 8px 0 0; border-bottom: 2px solid #e9ecef;">
+                            <div style="font-size: 0.8em; color: #868e96;">수</div>
+                            <div style="font-size: 1.4em; font-weight: 800;">16</div>
+                        </div>
+                        <div style="background: #fafafa; border-radius: 0 0 8px 8px; padding: 8px;">
+                            <div class="mock-event absent">
+                                <div class="time">14:00</div>
+                                <div class="name">정하윤 ✗</div>
+                                <div class="info">당일결석</div>
+                            </div>
+                            <div class="mock-event extra">
+                                <div class="time">17:00</div>
+                                <div class="name">체험단</div>
+                                <div class="info">기타업무</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explain-box">
+                <span class="explain-icon">🎨</span>
+                <strong>색상으로 상태를 구분해요!</strong>
+                <div class="legend" style="margin-top: 10px;">
+                    <div class="legend-item"><div class="legend-dot" style="background: white; border: 2px solid #333;"></div>예정된 수업</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #40c057;"></div>출석 완료</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #e03131;"></div>당일 결석</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #e64980;"></div>플래닝(상담)</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #fab005;"></div>기타 업무</div>
+                </div>
+            </div>
+            
+            <div class="explain-box tip">
+                <span class="explain-icon">👆</span>
+                <strong>요일 헤더(날짜 숫자)</strong>를 클릭하면 해당 날짜에 수업을 추가하거나 수업 가능 시간을 설정할 수 있어요!
+            </div>
+        </div>
+        
+        <!-- 섹션 3: 출석/결석 처리 -->
+        <div class="section" id="section3">
+            <div class="section-header">
+                <div class="section-icon">✅</div>
+                <div>
+                    <span class="section-num">SECTION 3</span>
+                    <h3 class="section-title">출석/결석 처리 (오수완)</h3>
+                </div>
+            </div>
+            
+            <p>수업 완료 후 출석 또는 당일결석 처리를 진행합니다. <strong>"오수완"</strong>은 <strong>"오늘 수업 완료"</strong>의 줄임말이에요!</p>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>수업 칸 클릭</h4>
+                        <p>주간 스케줄에서 완료할 수업(흰색 배경)을 클릭합니다.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ui-preview">
+                <div class="ui-preview-title">📝 수업 처리 팝업</div>
+                <div class="mock-modal">
+                    <div class="mock-modal-header">📝 수업 처리 (김민준)</div>
+                    <div class="mock-modal-body">
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9em;">피드백 입력 (필수)</label>
+                        <textarea class="mock-input" style="height: 70px; resize: none;" placeholder="오늘 배운 내용, 진도, 특이사항 등">바이엘 45번 연습. 손목 힘 빼는 연습 필요.</textarea>
+                        
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <span class="mock-btn green" style="flex: 1; text-align: center;">👍 오수완</span>
+                            <span class="mock-btn orange" style="flex: 1; text-align: center;">🚫 결석</span>
+                        </div>
+                        <span class="mock-btn red" style="width: 100%; display: block; text-align: center;">🗑️ 취소</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>피드백 작성</h4>
+                        <p>오늘 수업 내용, 진도, 특이사항 등을 간단히 기록합니다.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>버튼 선택</h4>
+                        <p>
+                            • <strong style="color: #28a745;">👍 오수완</strong> : 정상 출석 처리 (잔여 횟수 1회 차감)<br>
+                            • <strong style="color: #fd7e14;">🚫 결석</strong> : 당일 결석 처리 (잔여 횟수 1회 차감)<br>
+                            • <strong style="color: #dc3545;">🗑️ 취소</strong> : 수업 자체를 삭제 (횟수 차감 없음)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explain-box warning">
+                <span class="explain-icon">⚠️</span>
+                <strong>이미 출석 처리된 수업</strong>(초록색)을 클릭하면 "이미 출석된 수업입니다" 알림이 뜹니다. 수정이 필요하면 원장님께 문의하세요!
+            </div>
+        </div>
+        
+        <!-- 섹션 4: 수업 추가/수정 -->
+        <div class="section" id="section4">
+            <div class="section-header">
+                <div class="section-icon">➕</div>
+                <div>
+                    <span class="section-num">SECTION 4</span>
+                    <h3 class="section-title">수업 추가 및 수정</h3>
+                </div>
+            </div>
+            
+            <p>새로운 수업을 배정하거나 기존 수업 일정을 변경할 수 있습니다.</p>
+            
+            <div class="ui-preview">
+                <div class="ui-preview-title">📅 요일 헤더 클릭 → 날짜 설정 팝업</div>
+                <div class="mock-modal">
+                    <div class="mock-modal-header">📅 월요일 설정</div>
+                    <div class="mock-modal-body">
+                        <p style="color: #666; margin-bottom: 15px; font-size: 0.9em;">2026-04-14</p>
+                        
+                        <label style="font-weight: bold; display: block; margin-bottom: 8px; font-size: 0.9em;">수업 추가</label>
+                        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                            <select class="mock-input" style="flex: 2; margin: 0;">
+                                <option>김민준 (주2회)</option>
+                            </select>
+                            <select class="mock-input" style="flex: 1; margin: 0;">
+                                <option>14:00</option>
+                            </select>
+                        </div>
+                        <span class="mock-btn green" style="width: 100%; display: block; text-align: center;">+ 수업 추가</span>
+                        
+                        <hr style="margin: 20px 0; border-top: 1px dashed #ccc;">
+                        
+                        <label style="font-weight: bold; display: block; margin-bottom: 8px; font-size: 0.9em;">수업 가능 시간 ✓</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                            <label style="font-size: 0.85em; display: flex; align-items: center; gap: 4px;"><input type="checkbox" checked> 13:00</label>
+                            <label style="font-size: 0.85em; display: flex; align-items: center; gap: 4px;"><input type="checkbox" checked> 14:00</label>
+                            <label style="font-size: 0.85em; display: flex; align-items: center; gap: 4px;"><input type="checkbox" checked> 15:00</label>
+                            <label style="font-size: 0.85em; display: flex; align-items: center; gap: 4px;"><input type="checkbox"> 16:00</label>
+                            <label style="font-size: 0.85em; display: flex; align-items: center; gap: 4px;"><input type="checkbox"> 17:00</label>
+                        </div>
+                        <span class="mock-btn blue" style="width: 100%; display: block; text-align: center;">시간 저장</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explain-box tip">
+                <span class="explain-icon">💡</span>
+                <strong>체크된 시간</strong>은 수업 가능 시간으로, 대시보드 오른쪽의 시간표에서 <strong>초록색</strong>으로 표시됩니다. 체크 해제하면 <strong>회색(휴무)</strong>으로 바뀌어요!
+            </div>
+            
+            <div class="explain-box warning">
+                <span class="explain-icon">⚠️</span>
+                <strong>출강일이 아닌 요일</strong>에는 수업 추가가 제한됩니다. 출강요일 변경은 원장님께 문의하세요!
+            </div>
+        </div>
+        
+        <!-- 섹션 5: 수강생 상세 관리 -->
+        <div class="section" id="section5">
+            <div class="section-header">
+                <div class="section-icon">👤</div>
+                <div>
+                    <span class="section-num">SECTION 5</span>
+                    <h3 class="section-title">수강생 상세 관리</h3>
+                </div>
+            </div>
+            
+            <p>대시보드 하단의 수강생 목록에서 <strong>⚙️ 관리</strong> 버튼을 클릭하면 수강생 상세 페이지로 이동합니다.</p>
+            
+            <!-- 수강생 목록 탭 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">👨‍🎓 수강생 리스트 탭 (대시보드)</div>
+                <div class="mock-tabs">
+                    <div class="mock-tab active">수강중 (12)</div>
+                    <div class="mock-tab">홀딩 (2)</div>
+                    <div class="mock-tab">종료/환불 (5)</div>
+                </div>
+                <div class="mock-card" style="margin: 0;">
+                    <table style="width: 100%; font-size: 0.85em; border-collapse: collapse;">
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 10px; text-align: left;">이름/연락처</th>
+                            <th style="padding: 10px;">과목</th>
+                            <th style="padding: 10px;">잔여</th>
+                            <th style="padding: 10px;">관리</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px;"><strong>김민준</strong><br><span style="color: #888; font-size: 0.9em;">010-1234-5678</span></td>
+                            <td style="padding: 12px; text-align: center;">피아노</td>
+                            <td style="padding: 12px; text-align: center;"><span style="background: #e8f5e9; color: #155724; padding: 3px 8px; border-radius: 12px;">12회</span></td>
+                            <td style="padding: 12px; text-align: center;"><span class="mock-btn gray" style="padding: 5px 10px; font-size: 0.8em;">⚙️ 관리</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 수강생 상세 페이지 전체 구조 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">📋 수강생 상세 페이지 (전체 화면)</div>
+                
+                <!-- 과목 탭 -->
+                <div style="display: flex; gap: 8px; margin-bottom: 15px;">
+                    <span style="padding: 10px 18px; background: #3b82f6; color: white; border-radius: 25px; font-weight: 600; font-size: 0.9em;">피아노</span>
+                    <span style="padding: 10px 18px; background: white; color: #64748b; border: 1px solid #e2e8f0; border-radius: 25px; font-weight: 600; font-size: 0.9em;">보컬</span>
+                    <span style="padding: 10px 18px; background: #1e293b; color: white; border-radius: 25px; font-weight: bold; font-size: 0.9em;">+ 과목 추가</span>
+                </div>
+                
+                <div class="mock-card">
+                    <!-- 프로필 헤더 -->
+                    <div class="student-profile">
+                        <div>
+                            <span class="student-name">김민준</span>
+                            <span class="status-badge active" style="margin-left: 10px;">수강중</span>
+                            <div style="color: #64748b; font-size: 0.9em; margin-top: 5px;">010-1234-5678</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 핵심 지표 -->
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">잔여 수업</div>
+                            <span class="stat-value">12</span>
+                            <span class="stat-unit">회</span>
+                        </div>
+                        <div class="stat-box warning">
+                            <div class="stat-label">현재 회차</div>
+                            <span class="stat-value">3-2</span>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">최근 결제</div>
+                            <span class="stat-value">04/01</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 상세 정보 -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
+                        <span style="padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 0.9em;">피아노</span>
+                        <span style="padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 0.9em;">1시간</span>
+                        <span style="padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 0.9em;">홍길동 선생님</span>
+                        <span style="padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 0.9em;">고정</span>
+                        <span style="padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 0.9em;">월 14:00</span>
+                    </div>
+                    
+                    <!-- 버튼 영역 -->
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span class="mock-btn dark" style="padding: 8px 16px;">수정</span>
+                        <span style="padding: 8px 12px; background: #fff7ed; color: #d97706; border-radius: 8px; font-weight: 600; font-size: 0.85em;">⏸️ 홀딩</span>
+                        <span style="padding: 8px 12px; background: #fef2f2; color: #dc2626; border-radius: 8px; font-weight: 600; font-size: 0.85em;">🚫 종료</span>
+                        <span style="padding: 8px 12px; background: #f1f5f9; color: #475569; border-radius: 8px; font-weight: 600; font-size: 0.85em;">💰 환불</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 히스토리 테이블 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">📜 히스토리 (수업 기록)</div>
+                <div class="mock-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="margin: 0; border: none; padding: 0;">📜 히스토리</h4>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <label style="font-size: 0.85em; color: #64748b;"><input type="checkbox"> 결제만 보기</label>
+                            <span class="mock-btn" style="background: #3b82f6; color: white; padding: 8px 15px;">+ 수업 추가</span>
+                        </div>
+                    </div>
+                    
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"></th>
+                                <th>날짜</th>
+                                <th>회차</th>
+                                <th>상태</th>
+                                <th>피드백</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🎹</td>
+                                <td><strong>04.14</strong> <span style="color: #94a3b8;">(월)</span><br><span style="font-size: 0.85em; color: #64748b;">14:00</span></td>
+                                <td><span class="round-badge">3-2</span></td>
+                                <td><span style="color: #10b981;">● 출석</span></td>
+                                <td style="text-align: left; font-size: 0.9em;">바이엘 45번 완료. 다음 시간 체르니 시작</td>
+                            </tr>
+                            <tr>
+                                <td>🎹</td>
+                                <td><strong>04.07</strong> <span style="color: #94a3b8;">(월)</span><br><span style="font-size: 0.85em; color: #64748b;">14:00</span></td>
+                                <td><span class="round-badge">3-1</span></td>
+                                <td><span style="color: #10b981;">● 출석</span></td>
+                                <td style="text-align: left; font-size: 0.9em;">바이엘 43~44번 복습</td>
+                            </tr>
+                            <tr style="background: #dcfce7;">
+                                <td>💳</td>
+                                <td><strong>04.01</strong> <span style="color: #94a3b8;">(화)</span></td>
+                                <td><span style="background: #dcfce7; color: #16a34a; padding: 4px 10px; border-radius: 6px; font-weight: 700;">+4회</span></td>
+                                <td><span style="color: #475569;">카드</span></td>
+                                <td style="text-align: left;"><span style="color: #10b981; font-weight: 800;">+200,000원</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 홀딩/종료 모달 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">⏸️ 홀딩 / 🚫 종료 처리 팝업</div>
+                <div class="mock-modal">
+                    <div class="mock-modal-header">⏸ 홀딩</div>
+                    <div class="mock-modal-body">
+                        <div style="background: #fffbeb; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                            <label style="font-weight: bold; display: block; margin-bottom: 8px; color: #b45309; font-size: 0.9em;">⏸ 홀딩 종료 예정일</label>
+                            <input type="date" class="mock-input" style="margin: 0;" value="2026-05-01">
+                            <p style="font-size: 0.8em; color: #d97706; margin: 8px 0 0 0;">* 설정한 날짜까지 홀딩 상태가 유지됩니다.</p>
+                        </div>
+                        
+                        <label style="font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9em;">변경 사유</label>
+                        <textarea class="mock-input" style="height: 70px; resize: none;" placeholder="예: 병원 수술로 인해 홀딩">개인 사정으로 2주간 홀딩 요청</textarea>
+                        
+                        <span class="mock-btn" style="width: 100%; display: block; text-align: center; background: #007bff; color: white;">변경 저장</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explain-box tip">
+                <span class="explain-icon">📝</span>
+                히스토리에서 <strong>수업 행을 클릭</strong>하면 날짜/시간/상태/피드백을 수정할 수 있어요! (단, 상태 변경은 원장님만 가능)
+            </div>
+        </div>
+        
+        <!-- 섹션 6: 월별 보기 & 급여 -->
+        <div class="section" id="section6">
+            <div class="section-header">
+                <div class="section-icon">💰</div>
+                <div>
+                    <span class="section-num">SECTION 6</span>
+                    <h3 class="section-title">월별 보기 & 급여 확인</h3>
+                </div>
+            </div>
+            
+            <p>대시보드 상단의 <strong>📅 월별 보기</strong> 버튼을 클릭하면 월간 캘린더와 급여 내역을 확인할 수 있습니다.</p>
+            
+            <!-- 캘린더 미리보기 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">📅 월간 캘린더</div>
+                <div style="background: white; border-radius: 8px; padding: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span style="font-weight: bold;">◀</span>
+                        <span style="font-size: 1.3em; font-weight: 800;">2026년 4월</span>
+                        <span style="font-weight: bold;">▶</span>
+                    </div>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em;">
+                        <tr style="background: #f8f9fa;">
+                            <th style="padding: 8px; color: #dc3545;">일</th>
+                            <th style="padding: 8px;">월</th>
+                            <th style="padding: 8px;">화</th>
+                            <th style="padding: 8px;">수</th>
+                            <th style="padding: 8px;">목</th>
+                            <th style="padding: 8px;">금</th>
+                            <th style="padding: 8px; color: #007bff;">토</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">6</td>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">
+                                7
+                                <div style="background: #37b24d; color: white; padding: 2px 4px; border-radius: 3px; font-size: 0.75em; margin-top: 3px;">김민준 ✓</div>
+                            </td>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">
+                                8
+                                <div style="background: #37b24d; color: white; padding: 2px 4px; border-radius: 3px; font-size: 0.75em; margin-top: 3px;">이서연 ✓</div>
+                            </td>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">9</td>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">10</td>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">11</td>
+                            <td style="padding: 5px; vertical-align: top; height: 60px; border: 1px solid #eee;">12</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="explain-box">
+                <span class="explain-icon">👆</span>
+                캘린더의 <strong>수업(초록 박스)</strong>을 클릭하면 해당 학생의 상세 페이지로 바로 이동합니다!
+            </div>
+            
+            <!-- 급여 미리보기 -->
+            <div class="ui-preview">
+                <div class="ui-preview-title">💰 월 급여 내역 (화면 하단 스크롤)</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 15px;">
+                    <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 15px;">
+                        <h4 style="margin: 0 0 10px 0; color: #166534; font-size: 0.95em;">🎹 수업 급여</h4>
+                        <div style="font-size: 0.85em;">
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span>피아노 50분</span>
+                                <strong>24회</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span>피아노 30분</span>
+                                <strong>8회</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #86efac; margin-top: 5px; color: #166534; font-weight: bold;">
+                                <span>수업 총액</span>
+                                <span>960,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #fef2f2; border: 1px solid #fca5a5; border-radius: 10px; padding: 15px;">
+                        <h4 style="margin: 0 0 10px 0; color: #991b1b; font-size: 0.95em;">🚫 당일결석</h4>
+                        <div style="font-size: 0.85em;">
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span>결석 횟수</span>
+                                <strong>2회</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #fca5a5; margin-top: 5px; color: #991b1b; font-weight: bold;">
+                                <span>결석 급여</span>
+                                <span>40,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #fdf2f8; border: 1px solid #f9a8d4; border-radius: 10px; padding: 15px;">
+                        <h4 style="margin: 0 0 10px 0; color: #9d174d; font-size: 0.95em;">📅 플래닝</h4>
+                        <div style="font-size: 0.85em;">
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span>등록 성공</span>
+                                <strong>3건</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                                <span>등록 실패</span>
+                                <strong>1건</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid #f9a8d4; margin-top: 5px; color: #9d174d; font-weight: bold;">
+                                <span>인센티브</span>
+                                <span>150,000원</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 총합계 -->
+                <div class="salary-card">
+                    <div class="salary-row">
+                        <span>총 급여</span>
+                        <strong>1,150,000원</strong>
+                    </div>
+                    <div class="salary-row tax">
+                        <span>세금 (3.3%)</span>
+                        <strong>-37,950원</strong>
+                    </div>
+                    <div class="salary-row highlight">
+                        <span>💰 실수령액</span>
+                        <strong>1,112,050원</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explain-box warning">
+                <span class="explain-icon">⚠️</span>
+                급여는 <strong>오수완 처리된 수업</strong>만 집계됩니다! 수업 후 꼭 출석 처리를 해주세요.
+            </div>
+        </div>
+        
+        <!-- 푸터 -->
+        <div class="footer">
+            <p>📞 시스템 관련 문의는 원장님께 연락해주세요</p>
+            <p style="margin-top: 5px;">© 2026 오늘은뮤직 솔루션. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
